@@ -3,17 +3,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Page Title</title>
+        <title>ztonaz Fast Typing Javascript Code</title>
         <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     </head>
     
     <body>     
-        <input id="name" > 
+        <input id="theCopy" type=hidden> 
         <p id="whatIs"></p> 
         <p id="completeText"></p> 
         <br/>
-        <label>Input 2:</label>
-        <input id="msg" autofocus>
+        <input id="copy" autofocus>
     </body>
    
 </html>
@@ -22,22 +21,19 @@
 
 textToWrite = ["Hacemos ", "pruebas ", "escribiendo ", "codigo ", "random."]
 
-
+//index for word in complete text
+indexWordComplete=0
+indexLetterComplete=0
 
 
 var indexInputLen = 0
 var maxInputLen = textToWrite[indexInputLen].length
 indexWordIn = 0
-//wordInAllText = 1000000
-//letterIn = 100000000
 ttw=textToWrite[indexWordIn]
-document.getElementById("msg").maxLength = ttw.length
-// for (i=0; i<textToWrite.length; i++){
-//     ttw = ttw + textToWrite[i]
-// }
+document.getElementById("copy").maxLength = ttw.length
+
 document.getElementById("whatIs").innerText = ttw
 document.getElementById("whatIs").maxLength = maxInputLen
-
 
 w = document.getElementById("whatIs").innerText
 textWithColors = ""
@@ -47,83 +43,79 @@ for (var i = 0; i < w.length; i++) {
 
 document.getElementById("whatIs").innerHTML = textWithColors
 
+//create the complete Text 
+ttwComplete = textToWrite[indexWordComplete]
+document.getElementById("completeText").innerText = ttwComplete
 
+idWordComplete = 10000000
 
+completeTextWithColors= ""
+arrayTextToWriteComplete=[]
+idLetterComplete = 10000
+for (j=0; j<textToWrite.length; j++){
 
-//get all text
-/*
-allText = ""
-for (i=0; i<textToWrite.length;i++){
+    completeLetters = textToWrite[j]
+    theWord=""
+    for (y=0;y<completeLetters.length;y++){
+        theWord = theWord + '<span id=' + (idLetterComplete) + '>' + completeLetters[y] + '</span>'
 
-    styledText=""
-    for (j=0;j<textToWrite[i].length;j++){
-        styledText=styledText+'<span id =\"' + (j+letterIn) + '\" style="color:black">' + textToWrite[i][j] + '</span>'
+        idLetterComplete++
     }
-    letterIn = letterIn+100000000
+    arrayTextToWriteComplete.push(theWord)
 
-    allText=allText+'<div id=\"' + (i+wordInAllText) + '\">'+styledText+'</div>'
+
+    completeTextWithColors = completeTextWithColors + '<span id=' + (j+idWordComplete) + '>' + textToWrite[j] + '</span>'
+    document.getElementById("completeText").innerHTML = completeTextWithColors
+    
+   
 }
+document.getElementById("completeText").innerHTML = completeTextWithColors
+idLetterComplete = 10000
 
-
-document.getElementById("completeText").innerHTML = allText
-*/
-
+//Github at: https://github.com/ztonaz
 $(function() {
 
-   
-    
-
-    $("#msg").on('input', function (){
+    $("#copy").on('input', function (){
    // Your stuff...
-    $("#name").val($("#msg").val());
+    $("#theCopy").val($("#copy").val());
 
         // o text your write
-        o = $("#name").val()
-
+        o = $("#theCopy").val()
 
         lenText = o.length
-
-        
 
         w = document.getElementById("whatIs").innerText
 
         //original text with length of your input
         original = w.substring(0, lenText)
-
-
-        
         
         innerHas = document.getElementById("whatIs").innerHTML
-
-        //console.log(o + '\n' + original)
-
-
         
         for (i=0; i<lenText; i++){
             const div = document.getElementById(i);
             
             if (o[i]==original[i]){
                 div.style.color = "green"
+                $('#'+ idWordComplete).html($('#whatIs').html()+" ");
 
             }
             else{
                 if (div){
                     div.style.color = "red"
+                    $('#'+ idWordComplete).html($('#whatIs').html()+" ");
+
                 }
                 
             }
         }
 
-        
         for (i=lenText; i<innerHas.length; i++){
             $( "#" + i ).css( "color", "black" );
-
         }
-
-
+    
 
          if (lenText==maxInputLen){
-               // document.getElementById("msg").value = ""
+               // document.getElementById("copy").value = ""
                // ++indexInputLen
                // maxInputLen = textToWrite[indexInputLen].length
                // document.getElementById("whatIs").maxLength = maxInputLen
@@ -132,14 +124,15 @@ $(function() {
 
 
                 innerHas2 = document.getElementById("whatIs").innerHTML
-                lenInput = $("#msg").val().length
+                lenInput = $("#copy").val().length
                 console.log("my input length: "+ lenInput + "\n" + "theThext lenth: "+(w.length+1))
                 if (innerHas2.includes("red")){
-                    
+
                 }
                 else{
+                     $('#'+ idWordComplete).html($('#whatIs').html()+" ");
                     if(indexWordIn != textToWrite.length){
-                        str1 = $("#msg").val()
+                        str1 = $("#copy").val()
                         //if word and space correct go to next word
                         if (lenInput==w.length+1 && str1.indexOf(" ") != -1){
                             ++indexWordIn
@@ -153,9 +146,16 @@ $(function() {
                             }
 
                             document.getElementById("whatIs").innerHTML = textWithColors
-                            document.getElementById("msg").value = ""
-                            document.getElementById("msg").maxLength = ttw.length
+                            document.getElementById("copy").value = ""
+                            document.getElementById("copy").maxLength = ttw.length
+
                             
+
+                            deleteTheId = document.getElementById(idWordComplete).innerHTML
+                            ha = deleteTheId.replaceAll('id=' , "p=")
+                            document.getElementById(idWordComplete).innerHTML = ha
+
+                            idWordComplete++
                         }
 
 
@@ -179,28 +179,8 @@ $(function() {
 
 
 
-//auto writing on a input
-// function performSearch() {
-//     const customKeyCode = Math.floor((Math.random() * 10) + 60);
-    
-//     // I use .gLFyf.gsfi for the selector, you can inspect your google.com in case class is different in your case
-//     $('#msg').each(function(i) {
-//             $(this).attr("autocomplete","on");
-//             $(this).blur();
-//             $(this).focus();
-//             $(this).trigger($.Event("keydown", {keyCode: customKeyCode}));
-//             $(this).val(String.fromCharCode(customKeyCode));
-//             $(this).trigger($.Event("keypress", {keyCode: customKeyCode}));
-//             $(this).trigger($.Event("keyup", {keyCode: customKeyCode}));
-//                 $(this).parent().trigger('click');
-//     });
 
-//     console.log('filled ');
-// }
+//visit my blog at ztonaz.com 
 
-// // initial calls
-// setInterval(() => {
-//     performSearch();
-// }, 2000);
 
 </script>
