@@ -7,12 +7,19 @@
         <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     </head>
     
-    <body>     
-        <input id="theCopy" type=hidden> 
-        <p id="whatIs"></p> 
-        <p id="completeText"></p> 
-        <br/>
-        <input id="copy" autofocus>
+    <body>   
+
+        <div class="theContent">  
+            <button style="opacity:0.4" class="mods" id ="normal" onclick="changeToNormal()">Normal</button><p class="modinfo" id="normalText" style="opacity:1">*The whole sentence on the screen</p>
+            <button style = "opacity:1;" class="mods" id="eat" onclick="changeToEat()">Eat the Word</button><p class="modinfo" id="eatText" style="opacity:0">*Just one word on the screen</p>
+            <input id="theCopy" type=hidden> 
+            <p id="whatIs" style="opacity: 0;"></p> 
+            <p id="completeText"></p> 
+            <br/>
+            <input id="copy" autofocus>
+            <button id="start">START</button>
+            <div id="stats"></div>
+        </div>
     </body>
    
 </html>
@@ -38,7 +45,7 @@ document.getElementById("whatIs").maxLength = maxInputLen
 w = document.getElementById("whatIs").innerText
 textWithColors = ""
 for (var i = 0; i < w.length; i++) {
-    textWithColors = textWithColors + '<span id=' + i + ' style="color:black">' + w[i] + '</span>'
+    textWithColors = textWithColors + '<span id=' + i + ' style="color:white">' + w[i] + '</span>'
 }
 
 document.getElementById("whatIs").innerHTML = textWithColors
@@ -110,7 +117,7 @@ $(function() {
         }
 
         for (i=lenText; i<innerHas.length; i++){
-            $( "#" + i ).css( "color", "black" );
+            $( "#" + i ).css( "color", "white" );
         }
     
 
@@ -142,7 +149,7 @@ $(function() {
                             w = document.getElementById("whatIs").innerText
                             textWithColors = ""
                             for (var i = 0; i < w.length; i++) {
-                                textWithColors = textWithColors + '<span id=' + i + ' style="color:black">' + w[i] + '</span>'
+                                textWithColors = textWithColors + '<span id=' + i + ' style="color:white">' + w[i] + '</span>'
                             }
 
                             document.getElementById("whatIs").innerHTML = textWithColors
@@ -179,8 +186,134 @@ $(function() {
 
 
 
+function changeToNormal() {
+    document.getElementById("completeText").style.opacity = "1";
+    document.getElementById("whatIs").style.opacity = "0";
+    document.getElementById("normal").style.opacity = "0.4";
+    document.getElementById("eat").style.opacity = "1";
+    document.getElementById("normalText").style.opacity="1";
+    document.getElementById("eatText").style.opacity="0";
+
+     document.getElementById("copy").focus();
+}
+function changeToEat() {
+  document.getElementById("whatIs").style.opacity = "1";
+  document.getElementById("completeText").style.opacity = "0";
+  document.getElementById("normal").style.opacity = "1";
+    document.getElementById("eat").style.opacity = "0.4";
+    document.getElementById("normalText").style.opacity="0";
+    document.getElementById("eatText").style.opacity="1";
+
+  document.getElementById("copy").focus()
+}
+
+
+
+
 
 //visit my blog at ztonaz.com 
 
 
 </script>
+
+
+<style type="text/css">
+    body{
+        background: black;
+    }
+    .theContent{
+        position: relative;
+        width: 90%;
+        height: 90vh;
+        background: yellow;
+        margin: auto;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        opacity: .9;
+
+    }
+    #copy{
+           position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        font-size: 1.4em;
+        text-align: center;
+        caret-color: red;
+        caret-shape: block  ;
+    }
+    #whatIs{
+        position:absolute;
+        top:-60%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:75%; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto;
+        color: white;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        text-align: center;
+        font-size: 2em;
+    }
+    #completeText{
+        position:absolute;
+        top:-60%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:75%; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto;
+        color: white;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .mods{
+        position: absolute;
+        top: 4px;
+        width: 140px;
+        height: 30px;
+        background: white;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        border-style: none;
+    }
+    #normal{
+        left: 4px;!important
+    }
+    #eat{
+        left: 144px!important;
+    }
+    .modinfo{
+        position: absolute;
+        left: 7px;
+        top: 24px;
+        font-size: .6em;
+    }
+
+    #start{
+        position:absolute;
+        top:30%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:30px; /* Assign a value */
+        margin:auto;
+        color: white;
+        background: #00FF00;
+        border-style: none;
+    }
+
+</style>
