@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,72 +11,59 @@
         <div class="theContent">  
             <button style="opacity:0.4" class="mods" id ="normal" onclick="changeToNormal()">Normal</button><p class="modinfo" id="normalText" style="opacity:1">*The whole sentence on the screen</p>
             <button style = "opacity:1;" class="mods" id="eat" onclick="changeToEat()">Eat the Word</button><p class="modinfo" id="eatText" style="opacity:0">*Just one word on the screen</p>
-            <input id="theCopy" type=hidden> 
+            <input id="theCopy" type=hidden>
+            <p id="gogo" style="display:none">GO</p>
             <p id="whatIs" style="opacity: 0;"></p> 
             <p id="completeText"></p> 
             <br/>
             <input id="copy" autofocus>
-            <button id="start">START</button>
+            <button id="start" onclick="startTimer()">START</button>
             <div id="stats"></div>
+            <input id="timer3sec">
+            <p id="infostats"></p>
         </div>
     </body>
    
-</html>
+
 
 <script type="text/javascript">
-
-textToWrite = ["Hacemos ", "pruebas ", "escribiendo ", "codigo ", "random."]
-
-//index for word in complete text
-indexWordComplete=0
-indexLetterComplete=0
+//fast typing in English and spanish ztonaz
 
 
-var indexInputLen = 0
-var maxInputLen = textToWrite[indexInputLen].length
-indexWordIn = 0
-ttw=textToWrite[indexWordIn]
-document.getElementById("copy").maxLength = ttw.length
 
-document.getElementById("whatIs").innerText = ttw
-document.getElementById("whatIs").maxLength = maxInputLen
+allTexts = [
+    ["When you realize you want to spend the rest of your life with somebody, you want the rest of your life to start as soon as possible."],
+    ["They may take our lives, but they'll never take our freedom."],
+    ["Badges? We ain't got no badges! We don't need no badges! I don't have to show you any stinking badges."],
+    ["Hello! My name is Inigo Montoya - You killed my father - Prepare to die."],
+    ["The first rule of Fight Club is: You do not talk about Fight Club."],
+    ["It's no use going back to yesterday, because I was a different person then."],
+    ["If you hire people just because they can do a job, they'll work for your money - But if you hire people who believe what you believe, they'll work for you with blood and sweat and tears."],
+    ["If everything seems to be under control, you’re not going fast enough."],
+    ["Domingo de ramos, quien no estrena, no tiene manos."],
+    ["Que Navidad, tiempo de longanizas, haga sol y la Pascua de flores, de hornazos, haga fresco y lluvia para que haya buen tempero y cosecha."],
+    ["El tiempo de los tres hermanos: la pereza, la moquita y el soplamanos."],
+    ["A ojo de buen cubero: Expresión campestre que equivale a aproximadamente, al tanteo. El cubero era el encargado de fabricar cubas para la contención de líquidos y debía tener buena vista para elaborarlas perfectas."],
+    ["Amar es no tener que decir nunca 'lo siento'."],
+    ["El material del que están hechos los sueños."],
+    ["Pude haber sido alguien, en lugar de un vago, que eso es lo que soy, aceptémoslo."],
+    ["Uno del censo intentó hacerme una encuesta - me comí su hígado acompañado de habas y un buen Chianti."]
 
-w = document.getElementById("whatIs").innerText
-textWithColors = ""
-for (var i = 0; i < w.length; i++) {
-    textWithColors = textWithColors + '<span id=' + i + ' style="color:white">' + w[i] + '</span>'
-}
-
-document.getElementById("whatIs").innerHTML = textWithColors
-
-//create the complete Text 
-ttwComplete = textToWrite[indexWordComplete]
-document.getElementById("completeText").innerText = ttwComplete
-
-idWordComplete = 10000000
-
-completeTextWithColors= ""
-arrayTextToWriteComplete=[]
-idLetterComplete = 10000
-for (j=0; j<textToWrite.length; j++){
-
-    completeLetters = textToWrite[j]
-    theWord=""
-    for (y=0;y<completeLetters.length;y++){
-        theWord = theWord + '<span id=' + (idLetterComplete) + '>' + completeLetters[y] + '</span>'
-
-        idLetterComplete++
-    }
-    arrayTextToWriteComplete.push(theWord)
+]
 
 
-    completeTextWithColors = completeTextWithColors + '<span id=' + (j+idWordComplete) + '>' + textToWrite[j] + '</span>'
-    document.getElementById("completeText").innerHTML = completeTextWithColors
-    
-   
-}
-document.getElementById("completeText").innerHTML = completeTextWithColors
-idLetterComplete = 10000
+
+texts = allTexts.length-1
+
+textToWrite = []
+
+var maxInputLen =""
+var indexInputLen = "0"
+var maxInputLen = ""
+
+var demo_input = "";
+var type_this = "321 ";
+var index = 0;
 
 //Github at: https://github.com/ztonaz
 $(function() {
@@ -168,7 +154,15 @@ $(function() {
 
                          else{
                     if (str1.indexOf(".") != -1 && indexWordIn==textToWrite.length-1){
-                        alert("final")
+                        endTime = new Date().getTime();
+                        var time = (endTime - startTime)/1000;
+                        wpm = ((sizeTEXTCPM/5)/(time*0.0166667)).toPrecision(6)
+                        cpm = wpm*5
+                        //alert('Execution time: ' + time);
+                         document.getElementById("infostats").innerText ="You typed the text in " + time + " seconds. \nCPM: "+ cpm + "\nWPM: " + wpm;
+                        document.getElementById("infostats").style.opacity = 1
+                       alert("You finished in " + time + " seconds.")
+                        //alert("final")
                     }
 
                 }
@@ -184,9 +178,10 @@ $(function() {
     
 });
 
-
+whichMode = "normal"
 
 function changeToNormal() {
+    whichMode = "normal"
     document.getElementById("completeText").style.opacity = "1";
     document.getElementById("whatIs").style.opacity = "0";
     document.getElementById("normal").style.opacity = "0.4";
@@ -197,6 +192,7 @@ function changeToNormal() {
      document.getElementById("copy").focus();
 }
 function changeToEat() {
+    whichMode = "eat"
   document.getElementById("whatIs").style.opacity = "1";
   document.getElementById("completeText").style.opacity = "0";
   document.getElementById("normal").style.opacity = "1";
@@ -207,6 +203,146 @@ function changeToEat() {
   document.getElementById("copy").focus()
 }
 
+function showTheText(){
+
+    document.getElementById("copy").disabled="true";
+    //get a random text from our array
+
+    //get a random number between 0 and len of Texts array
+    randomText = Math.floor(Math.random() * (texts - 0 + 1) + 0)
+    theToWriteText = allTexts[randomText]
+    sizeTEXTCPM = theToWriteText.toString().length
+
+    hhhh = theToWriteText.toString().split(" ");
+    for (i=0;i<hhhh.length-1; i++){
+        hhhh[i] = hhhh[i] + " "
+    }
+    sizeTextWPM = hhhh.length
+    textToWrite = hhhh
+
+    //index for word in complete text
+indexWordComplete=0
+indexLetterComplete=0
+
+
+indexInputLen = 0
+maxInputLen = textToWrite[indexInputLen].length
+indexWordIn = 0
+ttw=textToWrite[indexWordIn]
+document.getElementById("copy").maxLength = ttw.length
+
+document.getElementById("whatIs").innerText = ttw
+document.getElementById("whatIs").maxLength = maxInputLen
+
+w = document.getElementById("whatIs").innerText
+textWithColors = ""
+for (var i = 0; i < w.length; i++) {
+    textWithColors = textWithColors + '<span id=' + i + ' style="color:white">' + w[i] + '</span>'
+}
+
+document.getElementById("whatIs").innerHTML = textWithColors
+
+//create the complete Text 
+ttwComplete = textToWrite[indexWordComplete]
+document.getElementById("completeText").innerText = ttwComplete
+
+idWordComplete = 10000000
+
+completeTextWithColors= ""
+arrayTextToWriteComplete=[]
+idLetterComplete = 10000
+for (j=0; j<textToWrite.length; j++){
+
+    completeLetters = textToWrite[j]
+    theWord=""
+    for (y=0;y<completeLetters.length;y++){
+        theWord = theWord + '<span id=' + (idLetterComplete) + '>' + completeLetters[y] + '</span>'
+
+        idLetterComplete++
+    }
+    arrayTextToWriteComplete.push(theWord)
+
+
+    completeTextWithColors = completeTextWithColors + '<span id=' + (j+idWordComplete) + '>' + textToWrite[j] + '</span>'
+    document.getElementById("completeText").innerHTML = completeTextWithColors
+    
+   
+}
+document.getElementById("completeText").innerHTML = completeTextWithColors
+idLetterComplete = 10000
+}
+
+
+demo_input = document.getElementById('timer3sec');
+
+type_this = "321 ";
+index = 0;
+
+window.next_letter = function() {
+    if (index <= type_this.length-1) {
+        demo_input.value = type_this[index];
+        index++
+        setTimeout("next_letter()", 900);
+        
+    }
+    
+}
+
+
+var startTime = new Date().getTime();
+var endTime = new Date().getTime();
+
+function timeElapsed(){
+    var time = endTime - starTime;
+    alert('Execution time: ' + time);
+}
+
+function startTimerF(){
+    startTime = new Date().getTime();
+}
+
+
+
+
+timer321 =""
+
+
+function gofor2sec(){
+    $('#gogo').show(1).delay(2000).hide(1);
+    document.getElementById("copy").disabled=false;
+
+    document.getElementById("copy").focus();
+}
+
+
+function fullStart(){
+    if (whichMode=="normal"){
+        document.getElementById("completeText").style.opacity = "1";
+    }
+    else if (whichMode=="eat"){
+        document.getElementById("whatIs").style.opacity = "1";
+    }
+    
+    
+    showTheText()
+    gofor2sec()
+    startTimerF()
+}
+
+function startTimer(){
+    document.getElementById("copy").disabled="true";
+    document.getElementById("completeText").style.opacity = "0";
+    document.getElementById("whatIs").style.opacity = "0";
+    document.getElementById("infostats").style.opacity = "0";
+    clearTimeout(timer321);
+    index = 0
+    next_letter()
+    document.getElementById('copy').value = ''
+    timer321 = setTimeout(fullStart, 3000)
+
+    
+
+}
 
 
 
@@ -246,7 +382,8 @@ function changeToEat() {
         font-size: 1.4em;
         text-align: center;
         caret-color: red;
-        caret-shape: block  ;
+        caret-shape: block;
+        autocomplete: off;
     }
     #whatIs{
         position:absolute;
@@ -258,6 +395,7 @@ function changeToEat() {
         height:50px; /* Assign a value */
         margin:auto;
         color: white;
+        text-shadow: 1px 1px #ff0000;
         font-family: 'Brush Script MT', cursive;
         font-weight: bold;
         text-align: center;
@@ -269,10 +407,11 @@ function changeToEat() {
         bottom:0;
         left:0;
         right:0;
-        width:75%; /* Assign a value */
+        width:95%; /* Assign a value */
         height:50px; /* Assign a value */
         margin:auto;
         color: white;
+        text-shadow: 1px 1px #ff0000;
         font-family: 'Brush Script MT', cursive;
         font-weight: bold;
         text-align: center;
@@ -314,6 +453,173 @@ function changeToEat() {
         color: white;
         background: #00FF00;
         border-style: none;
+        font-weight:bold;
     }
 
+    #timer3sec{
+        position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto auto auto 20px;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        font-size: 1.4em;
+        text-align: center;
+        caret-color: red;
+        caret-shape: block  ;position: absolute;
+        background: none;
+        border-style:none;
+        width:20px;
+        height:20px;
+    }
+
+    #infostats{
+        position:absolute;
+        bottom:5px;
+        left:15px;
+    }
+
+    #gogo{ 
+       position:absolute;
+        top:70%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:30px; /* Assign a value */
+        margin:auto;
+        color: green;
+        border-style: none;
+        text-align:center;
+        animation: crescendo 2s;
+        
+     }
+ @keyframes crescendo {
+  0%   {transform: scale(.7);}
+  100% {transform: scale(3.5);}
+}
+
+
+@media screen and (max-width: 780px) {
+    
+#whatIs{
+        position:absolute;
+        top:-60%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:95%; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto;
+        color: white;
+        text-shadow: 1px 1px #ff0000;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        text-align: center;
+        font-size: 1.2em;
+    }
+    #completeText{
+        position:absolute;
+        top:-60%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:95%; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto;
+        color: white;
+        text-shadow: 1px 1px #ff0000;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        text-align: center;
+        font-size: 1.2em;
+    }
+
+
+     #start{
+        position:absolute;
+        top:65%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:30px; /* Assign a value */
+        margin:auto;
+        color: white;
+        background: #00FF00;
+        border-style: none;
+        font-weight:bold;
+    }
+
+    #copy{
+        position:absolute;
+        top:45%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        font-size: 1.4em;
+        text-align: center;
+        caret-color: red;
+        caret-shape: block;
+        autocomplete: off;
+    }
+
+    #gogo{ 
+       position:absolute;
+        top:90%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:30px; /* Assign a value */
+        margin:auto;
+        color: green;
+        border-style: none;
+        text-align:center;
+        animation: crescendo 2s;
+        
+     }
+
+    #infostats{
+        position:absolute;
+        bottom:2px;
+        left:15px;
+    }
+
+
+     #timer3sec{
+        position:absolute;
+        top:60%;
+        bottom:0;
+        left:0;
+        right:0;
+        width:200px; /* Assign a value */
+        height:50px; /* Assign a value */
+        margin:auto auto auto 20px;
+        font-family: 'Brush Script MT', cursive;
+        font-weight: bold;
+        font-size: 1.4em;
+        text-align: center;
+        caret-color: red;
+        caret-shape: block  ;position: absolute;
+        background: none;
+        border-style:none;
+        width:20px;
+        height:20px;
+    }
+
+    
+}
+
+
 </style>
+</html>
